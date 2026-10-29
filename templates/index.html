@@ -1,63 +1,382 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maternal Health Risk Prediction</title>
+
+    <title>MaternalCare | Health Risk Prediction</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f3f7fc;
+            color: #243047;
+            min-height: 100vh;
+        }
+
+        header {
+            background: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5eaf2;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: bold;
+            color: #147d75;
+        }
+
+        .logo span {
+            color: #263c58;
+        }
+
+        .header-tag {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .tag {
+            display: inline-block;
+            color: #147d75;
+            background: #dff7f1;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: clamp(28px, 4vw, 40px);
+            margin-bottom: 12px;
+            color: #1e3049;
+        }
+
+        .hero p {
+            color: #718096;
+            line-height: 1.7;
+            max-width: 620px;
+            margin: auto;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(36, 59, 83, 0.06);
+            border: 1px solid #e8edf4;
+        }
+
+        .card h2 {
+            font-size: 21px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #8290a3;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 9px;
+            color: #44536a;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 13px 12px;
+            border: 1px solid #dbe3ed;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .field input:focus {
+            border-color: #168b80;
+            box-shadow: 0 0 0 3px rgba(22, 139, 128, 0.12);
+        }
+
+        .unit {
+            color: #8a98aa;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .predict-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 26px;
+            background: #147d75;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .predict-btn:hover {
+            background: #10665f;
+        }
+
+        .info-card {
+            background: linear-gradient(145deg, #e1f7f3, #f1f8ff);
+            border: 1px solid #d5eee9;
+        }
+
+        .icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            font-size: 27px;
+            background: white;
+            margin-bottom: 22px;
+        }
+
+        .info-card h2 {
+            font-size: 23px;
+            line-height: 1.4;
+        }
+
+        .info-card p {
+            color: #61758a;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-top: 12px;
+        }
+
+        .result {
+            margin-top: 24px;
+            padding: 20px;
+            border-radius: 12px;
+            background: #f0fdfa;
+            border: 1px solid #bcebe0;
+        }
+
+        .result h3 {
+            color: #126b60;
+            margin-bottom: 8px;
+        }
+
+        .result p {
+            color: #40596a;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .error {
+            margin-top: 18px;
+            padding: 13px;
+            border-radius: 9px;
+            background: #fff0f0;
+            color: #b42318;
+            font-size: 14px;
+        }
+
+        .notice {
+            margin-top: 22px;
+            padding: 16px;
+            border-left: 4px solid #e5ad51;
+            background: #fff9eb;
+            border-radius: 5px;
+            color: #80632c;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px 15px;
+            color: #8a97a8;
+            font-size: 12px;
+        }
+
+        @media (max-width: 760px) {
+            header {
+                padding: 18px 5%;
+            }
+
+            .header-tag {
+                display: none;
+            }
+
+            .container {
+                margin: 30px auto;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 23px;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Maternal Health Risk Prediction</h1>
+    <header>
+        <div class="logo">✚ Maternal<span>Care</span></div>
+        <div class="header-tag">Maternal Health Risk Prediction</div>
+    </header>
 
-    <p>
-        Educational prototype only. This is not a medical diagnosis tool.
-    </p>
+    <main class="container">
+        <section class="hero">
+            <div class="tag">MACHINE LEARNING PROJECT</div>
+            <h1>Maternal Health Risk Assessment</h1>
+            <p>
+                Enter the health measurements below to see the risk category
+                predicted by our machine learning model.
+            </p>
+        </section>
 
-    <form method="POST">
-        <label>
-            Age:
-            <input type="number" name="Age" step="1" required>
-        </label>
-        <br><br>
+        <div class="dashboard">
+            <section class="card">
+                <h2>Patient Information</h2>
+                <p class="subtitle">
+                    Enter all six measurements to generate a prediction.
+                </p>
 
-        <label>
-            Systolic Blood Pressure:
-            <input type="number" name="SystolicBP" step="1" required>
-        </label>
-        <br><br>
+                <form method="POST">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="Age">Age (years)</label>
+                            <input id="Age" type="number" name="Age"
+                                   min="1" max="120" step="1" required>
+                            <p class="unit">Patient's age</p>
+                        </div>
 
-        <label>
-            Diastolic Blood Pressure:
-            <input type="number" name="DiastolicBP" step="1" required>
-        </label>
-        <br><br>
+                        <div class="field">
+                            <label for="HeartRate">Heart Rate</label>
+                            <input id="HeartRate" type="number" name="HeartRate"
+                                   min="1" step="1" required>
+                            <p class="unit">Beats per minute</p>
+                        </div>
 
-        <label>
-            Blood Sugar:
-            <input type="number" name="BS" step="any" required>
-        </label>
-        <br><br>
+                        <div class="field">
+                            <label for="SystolicBP">Systolic BP</label>
+                            <input id="SystolicBP" type="number" name="SystolicBP"
+                                   min="1" step="1" required>
+                            <p class="unit">Upper blood pressure value</p>
+                        </div>
 
-        <label>
-            Body Temperature:
-            <input type="number" name="BodyTemp" step="any" required>
-        </label>
-        <br><br>
+                        <div class="field">
+                            <label for="DiastolicBP">Diastolic BP</label>
+                            <input id="DiastolicBP" type="number" name="DiastolicBP"
+                                   min="1" step="1" required>
+                            <p class="unit">Lower blood pressure value</p>
+                        </div>
 
-        <label>
-            Heart Rate:
-            <input type="number" name="HeartRate" step="1" required>
-        </label>
-        <br><br>
+                        <div class="field">
+                            <label for="BS">Blood Sugar</label>
+                            <input id="BS" type="number" name="BS"
+                                   min="0" step="any" required>
+                            <p class="unit">Use the dataset's expected unit</p>
+                        </div>
 
-        <button type="submit">Predict Risk Level</button>
-    </form>
+                        <div class="field">
+                            <label for="BodyTemp">Body Temperature</label>
+                            <input id="BodyTemp" type="number" name="BodyTemp"
+                                   min="0" step="any" required>
+                            <p class="unit">Use the dataset's expected unit</p>
+                        </div>
+                    </div>
 
- {% if error %}
-    <p style="color: red;">{{ error }}</p>
-{% endif %}
+                    <button class="predict-btn" type="submit">
+                        Predict Risk Level &nbsp; →
+                    </button>
+                </form>
 
-{% if prediction %}
-    <h2>Predicted risk: {{ prediction }}</h2>
-{% endif %}
+                {% if error %}
+                    <div class="error" role="alert">{{ error }}</div>
+                {% endif %}
+
+                {% if prediction %}
+                    <div class="result" role="status">
+                        <h3>Prediction Result</h3>
+                        <p>
+                            Predicted risk:
+                            <strong>{{ prediction }}</strong>
+                        </p>
+                        <p>
+                            This is a model-generated estimate, not a medical diagnosis.
+                        </p>
+                    </div>
+                {% endif %}
+            </section>
+
+            <aside class="card info-card">
+                <div class="icon">♡</div>
+                <h2>Supporting better maternal health awareness</h2>
+                <p>
+                    This educational project uses a trained machine learning
+                    model to classify input measurements into a predicted
+                    maternal health risk category.
+                </p>
+
+                <div class="notice">
+                    <strong>Important health notice</strong><br>
+                    This website is an educational prototype, not a medical
+                    diagnosis tool. Predictions may be inaccurate. Always
+                    consult a qualified healthcare professional about health
+                    concerns and pregnancy care.
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer>
+        MaternalCare · Machine Learning Project · For educational use only
+    </footer>
 </body>
 </html>
