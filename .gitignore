@@ -16,3 +16,10 @@ env/
 .idea/
 .DS_Store
 Thumbs.dbmaternal_health_risk_backup*.zip
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Backup archives
+maternal_health_risk_backup*.zip
