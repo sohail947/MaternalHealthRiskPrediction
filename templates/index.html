@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maternal Health Risk Prediction</title>
+</head>
+<body>
+    <h1>Maternal Health Risk Prediction</h1>
+
+    <p>
+        Educational prototype only. This is not a medical diagnosis tool.
+    </p>
+
+    <form method="POST">
+        <label>
+            Age:
+            <input type="number" name="Age" step="1" required>
+        </label>
+        <br><br>
+
+        <label>
+            Systolic Blood Pressure:
+            <input type="number" name="SystolicBP" step="1" required>
+        </label>
+        <br><br>
+
+        <label>
+            Diastolic Blood Pressure:
+            <input type="number" name="DiastolicBP" step="1" required>
+        </label>
+        <br><br>
+
+        <label>
+            Blood Sugar:
+            <input type="number" name="BS" step="any" required>
+        </label>
+        <br><br>
+
+        <label>
+            Body Temperature:
+            <input type="number" name="BodyTemp" step="any" required>
+        </label>
+        <br><br>
+
+        <label>
+            Heart Rate:
+            <input type="number" name="HeartRate" step="1" required>
+        </label>
+        <br><br>
+
+        <button type="submit">Predict Risk Level</button>
+    </form>
+
+ {% if error %}
+    <p style="color: red;">{{ error }}</p>
+{% endif %}
+
+{% if prediction %}
+    <h2>Predicted risk: {{ prediction }}</h2>
+{% endif %}
+</body>
+</html>
