@@ -23,3 +23,6 @@ __pycache__/
 
 # Backup archives
 maternal_health_risk_backup*.zip
+
+# Local patient records
+maternal_health.db*

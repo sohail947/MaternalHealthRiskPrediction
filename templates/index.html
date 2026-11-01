@@ -227,6 +227,109 @@
             line-height: 1.7;
         }
 
+        .statistics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border: 1px solid #e8edf4;
+            border-radius: 12px;
+        }
+
+        .stat-card p {
+            color: #718096;
+            font-size: 13px;
+        }
+
+        .stat-card strong {
+            display: block;
+            margin-top: 8px;
+            color: #147d75;
+            font-size: 27px;
+        }
+
+        .records-card {
+            margin-top: 24px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+            margin: 18px 0;
+        }
+
+        .search-form input {
+            flex: 1;
+            min-width: 0;
+            padding: 11px 12px;
+            border: 1px solid #dbe3ed;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .search-form button,
+        .delete-btn {
+            padding: 10px 14px;
+            border: 0;
+            border-radius: 8px;
+            color: white;
+            background: #147d75;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .search-form a {
+            align-self: center;
+            color: #147d75;
+            font-size: 14px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        th,
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e8edf4;
+            text-align: left;
+        }
+
+        th {
+            color: #44536a;
+            background: #f7f9fc;
+        }
+
+        .delete-btn {
+            background: #b42318;
+        }
+
+        .success {
+            margin-top: 18px;
+            padding: 13px;
+            border-radius: 9px;
+            background: #f0fdfa;
+            color: #126b60;
+            font-size: 14px;
+        }
+
+        .empty-records {
+            color: #718096;
+            padding: 18px 0;
+        }
+
         footer {
             text-align: center;
             padding: 25px 15px;
@@ -249,6 +352,10 @@
 
             .dashboard {
                 grid-template-columns: 1fr;
+            }
+
+            .statistics {
+                grid-template-columns: 1fr 1fr;
             }
 
             .card {
@@ -289,6 +396,13 @@
 
                 <form method="POST">
                     <div class="form-grid">
+                        <div class="field">
+                            <label for="patient_name">Patient Name</label>
+                            <input id="patient_name" type="text" name="patient_name"
+                                   maxlength="120" required>
+                            <p class="unit">Used to identify this record</p>
+                        </div>
+
                         <div class="field">
                             <label for="Age">Age (years)</label>
                             <input id="Age" type="number" name="Age"
@@ -341,6 +455,10 @@
                     <div class="error" role="alert">{{ error }}</div>
                 {% endif %}
 
+                {% if success_message %}
+                    <div class="success" role="status">{{ success_message }}</div>
+                {% endif %}
+
                 {% if prediction %}
                     <div class="result" role="status">
                         <h3>Prediction Result</h3>
@@ -373,6 +491,87 @@
                 </div>
             </aside>
         </div>
+
+        <section class="statistics" aria-label="Patient risk statistics">
+            <div class="stat-card">
+                <p>Total Patients</p>
+                <strong>{{ statistics["total"] }}</strong>
+            </div>
+            <div class="stat-card">
+                <p>Low Risk</p>
+                <strong>{{ statistics["low"] }}</strong>
+            </div>
+            <div class="stat-card">
+                <p>Medium Risk</p>
+                <strong>{{ statistics["medium"] }}</strong>
+            </div>
+            <div class="stat-card">
+                <p>High Risk</p>
+                <strong>{{ statistics["high"] }}</strong>
+            </div>
+        </section>
+
+        <section class="card records-card">
+            <h2>Patient Records</h2>
+            <p class="subtitle">
+                Search by the automatically assigned Patient ID, or view all saved predictions.
+            </p>
+
+            <form class="search-form" method="GET" action="/">
+                <input type="number" min="1" name="patient_id"
+                       value="{{ search_id }}" placeholder="Enter Patient ID"
+                       aria-label="Patient ID">
+                <button type="submit">Search</button>
+                <a href="{{ url_for('home') }}">Show all</a>
+            </form>
+
+            {% if records %}
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Patient ID</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Systolic BP</th>
+                                <th>Diastolic BP</th>
+                                <th>Blood Sugar</th>
+                                <th>Body Temperature</th>
+                                <th>Heart Rate</th>
+                                <th>Predicted Risk</th>
+                                <th>Saved At</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in records %}
+                                <tr>
+                                    <td>{{ record["patient_id"] }}</td>
+                                    <td>{{ record["patient_name"] }}</td>
+                                    <td>{{ record["Age"] }}</td>
+                                    <td>{{ record["SystolicBP"] }}</td>
+                                    <td>{{ record["DiastolicBP"] }}</td>
+                                    <td>{{ record["BS"] }}</td>
+                                    <td>{{ record["BodyTemp"] }}</td>
+                                    <td>{{ record["HeartRate"] }}</td>
+                                    <td>{{ record["risk_level"]|title }}</td>
+                                    <td>{{ record["created_at"] }}</td>
+                                    <td>
+                                        <form method="POST"
+                                              action="{{ url_for('delete_patient', patient_id=record['patient_id']) }}"
+                                              onsubmit="return confirm('Delete this patient record?');">
+                                            <button class="delete-btn" type="submit">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="empty-records">No patient records to display.</p>
+            {% endif %}
+        </section>
     </main>
 
     <footer>

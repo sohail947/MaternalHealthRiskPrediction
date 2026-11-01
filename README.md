@@ -47,6 +47,23 @@ Random Forest was selected because it performed best in this comparison.
 3. Open this address:
    http://127.0.0.1:5000
 
+## Patient records and dashboard
+
+The app creates `maternal_health.db` in the project folder automatically.
+After a successful prediction, it saves the patient's name, an automatically
+assigned Patient ID, the six measurements, the predicted risk, and the date
+and time of the prediction. The page shows all saved records and total, low,
+medium, and high risk counts. Use the Patient ID search field to find a
+record, or its Delete button to remove it.
+
+The database contains health information and patient names. Keep it private,
+use only information you are permitted to store, and do not treat this
+educational application as a medical records system.
+
+Run the app tests with:
+
+   python -m unittest discover -s tests
+
 ## Important files
 
 app.py - Flask application
@@ -56,4 +73,5 @@ src/compare_models.py - model comparison
 src/predict_one.py - one-row prediction test
 models/random_forest.joblib - saved model
 templates/index.html - web form
+maternal_health.db - SQLite patient records (created automatically)
 requirements.txt - package versions
